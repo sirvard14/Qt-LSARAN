@@ -1,5 +1,5 @@
-#include "widget.h"
 #include <QApplication>
+#include <QWidget>
 #include <QLineEdit>
 #include <QSpinBox>
 #include <QProgressBar>
@@ -10,31 +10,44 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    Widget w;
+    QWidget w;
 
-    QHBoxLayout h1,h2,h3;
     QVBoxLayout v;
-    QLabel l1("FULL Name"),l2,l3;
-    QLineEdit fname;
-    QSpinBox mog;
+    QHBoxLayout h1, h2, h3, h4, h5;
+
+
+    QLabel l1("Name");
+    QLabel l2("Surname");
+    QLabel l3("Age");
+    QLabel l4("MOG");
+    QLabel l5("Progress");
+
+
+    QLineEdit Name;
+    QLineEdit Surname;
+    QSpinBox Age;
+    QLineEdit MOG;
     QProgressBar progress;
 
-    l2.setText("MOG");
-    l3.setText("Progress");
-
     h1.addWidget(&l1);
-    h1.addWidget(&fname);
+    h1.addWidget(&Name);
     h2.addWidget(&l2);
-    h2.addWidget(&mog);
+    h2.addWidget(&Surname);
     h3.addWidget(&l3);
-    h3.addWidget(&progress);
+    h3.addWidget(&Age);
+    h4.addWidget(&l4);
+    h4.addWidget(&MOG);
+    h5.addWidget(&l5);
+    h5.addWidget(&progress);
+
     v.addLayout(&h1);
     v.addLayout(&h2);
     v.addLayout(&h3);
+    v.addLayout(&h4);
+    v.addLayout(&h5);
+
 
     w.setLayout(&v);
-    w.setWindowTitle("My Progress");
-    w.resize(400,400);
     w.show();
 
     return a.exec();
