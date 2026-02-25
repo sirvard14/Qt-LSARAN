@@ -1,4 +1,3 @@
-
 #include <QApplication>
 #include <QLabel>
 #include <QSlider>
@@ -61,6 +60,10 @@ int main(int argc, char *argv[])
     QObject::connect(spin, SIGNAL(valueChanged(int)), s, SLOT(setValue(int)));
     QObject::connect(s, SIGNAL(valueChanged(int)), n, SLOT(display(int)));
     QObject::connect(spin, SIGNAL(valueChanged(int)), n, SLOT(display(int)));
+
+    QObject::connect(fname, &QLineEdit::textChanged, [=](const QString &text){
+            l4->setText("Full name: " + text);
+        });
 
     w.resize(500,300);
     w.show();
