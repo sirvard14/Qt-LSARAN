@@ -1,55 +1,54 @@
+
 #include <QApplication>
-#include <QWidget>
-#include <QLineEdit>
+#include <QLabel>
+#include <QSlider>
 #include <QSpinBox>
-#include <QProgressBar>
+#include <QLCDNumber>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QLabel>
-#include <QDate>
+#include <QLineEdit>
+#include <QWidget>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
     QWidget w;
+    w.setWindowTitle("Project");
 
-    QVBoxLayout *v = new QVBoxLayout;
-    QHBoxLayout *h1 = new QHBoxLayout;
-    QHBoxLayout *h2 = new QHBoxLayout;
-    QHBoxLayout *h3 = new QHBoxLayout;
-    QHBoxLayout *h4 = new QHBoxLayout;
-    QHBoxLayout *h5 = new QHBoxLayout;
+    QVBoxLayout *v = new QVBoxLayout(&w);
 
-    QLabel *l1 = new QLabel("Name");
-    QLabel *l2 = new QLabel("Surname");
-    QLabel *l3 = new QLabel("Age");
-    QLabel *l4 = new QLabel("MOG");
-    QLabel *l5 = new QLabel("Progress");
-    QLabel *dateLabel = new QLabel(QDate::currentDate().toString());
 
-    QLineEdit *Name = new QLineEdit;
-    QLineEdit *Surname = new QLineEdit;
-    QSpinBox *Age = new QSpinBox;
-    QLineEdit *MOG = new QLineEdit;
-    QProgressBar *progress = new QProgressBar;
-
-    progress->setRange(0, 100);
-
+    QHBoxLayout *h1 = new QHBoxLayout();
+    QLabel *l1 = new QLabel("Full name");
+    QLineEdit *fname = new QLineEdit();
     h1->addWidget(l1);
-    h1->addWidget(Name);
+    h1->addWidget(fname);
 
+
+    QHBoxLayout *h2 = new QHBoxLayout();
+    QLabel *l2 = new QLabel("Age");
+    QSlider *s = new QSlider(Qt::Horizontal);
+    s->setRange(0, 100);
     h2->addWidget(l2);
-    h2->addWidget(Surname);
+    h2->addWidget(s);
 
+    QHBoxLayout *h3 = new QHBoxLayout();
+    QLabel *l3 = new QLabel("Age");
+    QSpinBox *spin = new QSpinBox();
+    spin->setRange(0, 100);
     h3->addWidget(l3);
-    h3->addWidget(Age);
+    h3->addWidget(spin);
 
-    h4->addWidget(l4);
-    h4->addWidget(MOG);
 
-    h5->addWidget(l5);
-    h5->addWidget(progress);
-    h5->addWidget(dateLabel);
+    QHBoxLayout *h4 = new QHBoxLayout();
+    QLCDNumber *n = new QLCDNumber();
+    n->setFixedSize(450,40);
+    h4->addWidget(n);
+
+    QHBoxLayout *h5 = new QHBoxLayout();
+    QLabel *l4 = new QLabel("Label");
+    h5->addWidget(l4);
 
     v->addLayout(h1);
     v->addLayout(h2);
@@ -57,9 +56,13 @@ int main(int argc, char *argv[])
     v->addLayout(h4);
     v->addLayout(h5);
 
-    w.setLayout(v);
-    w.setStyleSheet("color: white; background-color: pink;");
-    w.resize(400,400);
+
+    QObject::connect(s, SIGNAL(valueChanged(int)), spin, SLOT(setValue(int)));
+    QObject::connect(spin, SIGNAL(valueChanged(int)), s, SLOT(setValue(int)));
+    QObject::connect(s, SIGNAL(valueChanged(int)), n, SLOT(display(int)));
+    QObject::connect(spin, SIGNAL(valueChanged(int)), n, SLOT(display(int)));
+
+    w.resize(500,300);
     w.show();
 
     return a.exec();
