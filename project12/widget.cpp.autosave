@@ -1,0 +1,42 @@
+#include "widget.h"
+
+Widget::Widget(QWidget *parent) : QWidget(parent) {
+
+    mainLayout = new QVBoxLayout(this);
+
+
+    l1 = new QLabel("Գույն:");
+    v1 = new QRadioButton("Կարմիր");
+    v2 = new QRadioButton("Սև");
+    v3 = new QRadioButton("Դեղին");
+    h1 = new QHBoxLayout();
+    h1->addWidget(l1);
+    h1->addWidget(v1); h1->addWidget(v2); h1->addWidget(v3);
+
+
+    lblBuy = new QLabel("Գնման գին:");
+    editBuy = new QLineEdit();
+    hBuy = new QHBoxLayout();
+    hBuy->addWidget(lblBuy);
+    hBuy->addWidget(editBuy);
+
+
+    lblSell = new QLabel("Վաճառքի գին:");
+    editSell = new QLineEdit();
+    hSell = new QHBoxLayout();
+    hSell->addWidget(lblSell);
+    hSell->addWidget(editSell);
+
+
+    btnSubmit = new QPushButton("Պահպանել տվյալները");
+
+
+    mainLayout->addLayout(h1);
+    mainLayout->addLayout(hBuy);
+    mainLayout->addLayout(hSell);
+    mainLayout->addWidget(btnSubmit);
+
+     this->setWindowTitle("lolik");
+}
+
+Widget::~Widget() {}
