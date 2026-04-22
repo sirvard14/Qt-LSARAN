@@ -1,26 +1,35 @@
 #include "widget.h"
-#include <QLabel>
-#include <QVBoxLayout>
+#include <QPainter>
 
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
 {
-    this->setWindowTitle("Օգտվողի տվյալներ");
-    this->resize(400, 200);
-
-    QVBoxLayout *layout = new QVBoxLayout(this);
-
-    QLabel *nameLabel = new QLabel("Անուն: Սիրվարդ");
-    nameLabel->setStyleSheet("color: white; background-color: blue; font-size: 18px; font-weight: bold;");
-    nameLabel->setAlignment(Qt::AlignCenter);
-    layout->addWidget(nameLabel);
-
-    QLabel *surnameLabel = new QLabel("Ազգանուն: Փաշինյան");
-    surnameLabel->setStyleSheet("color: black; background-color: lightgreen; font-size: 18px; font-weight: bold;");
-    surnameLabel->setAlignment(Qt::AlignCenter);
-    layout->addWidget(surnameLabel);
+    resize(400, 400);
 }
 
-Widget::~Widget()
+void Widget::paintEvent(QPaintEvent *)
 {
+    QPainter painter(this);
+
+    int size = 8;
+
+    int boardSize = qMin(width(), height());
+    int cell = boardSize / size;
+
+    int offsetX = (width() - boardSize) / 2;
+    int offsetY = (height() - boardSize) / 2;
+
+    for(int i = 0; i < size; i++) {
+        for(int j = 0; j < size; j++) {
+
+            if((i + j) % 2 == 0)
+                painter.setBrush(Qt::white);
+            else
+                painter.setBrush(Qt::black);
+
+            painter.drawRect(offsetX + j * cell,
+                             offsetY + i * cell,
+                             cell, cell);
+        }
+    }
 }
