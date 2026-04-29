@@ -1,0 +1,45 @@
+#include "mainwindow.h"
+#include<QMenuBar>
+#include<QMenu>
+#include<QAction>
+
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
+{
+    resize(300,400);
+    createMenu();
+}
+
+MainWindow::~MainWindow()
+{
+
+}
+
+void MainWindow::createMenu(){
+    QMenuBar *mBar=this->menuBar();
+    QMenu *file=mBar->addMenu("file");
+
+
+    QMenu *submenu=file->addMenu("Submenu");
+
+
+    QAction *newAction=new QAction("New",this);
+    QAction *openAction=new QAction("Open",this);
+    QAction *exitAction=new QAction("Exit",this);
+    QAction *child=new QAction("Child",this);
+
+
+
+    file->addAction(newAction);
+    file->addAction(openAction);
+    file->addSeparator();
+    file->addAction(exitAction);
+    file->addMenu(submenu);
+    submenu->addAction(child);
+    
+    
+   
+
+
+    connect(exitAction, &QAction::triggered, this, &QWidget::close);
+}
