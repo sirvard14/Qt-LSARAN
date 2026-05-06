@@ -2,18 +2,21 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QAction>
+#include <QMenu>
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = 0);
+    MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+private slots:
+    void changeColor();
 private:
-   void  createMenu();
-
+    void createMenu();
 };
-
 
 #endif // MAINWINDOW_H
