@@ -3,79 +3,109 @@
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
 {
-    l1 = new QLabel("Minutes:");
-    l2 = new QLabel("Timer:");
+    // Layouts
+    v1 = new QVBoxLayout(this);
 
-    minutes = new QSpinBox;
-    minutes->setRange(1, 60);
+    h1 = new QHBoxLayout();
+    h2 = new QHBoxLayout();
+    h3 = new QHBoxLayout();
+
+    // Widgets
+    l1 = new QLabel("minutes");
+    l2 = new QLabel("timer");
+
+    minutes = new QSpinBox();
+    minutes->setRange(1, 999);
+
+    lcd = new QLCDNumber();
+    lcd->setDigitCount(5);
+    lcd->display("00:00");
 
     ok = new QPushButton("OK");
-
-    LCD = new QLCDNumber;
+    pause = new QPushButton("Pause");
+    reset = new QPushButton("Reset");
 
     timer = new QTimer(this);
 
-    h1 = new QHBoxLayout;
-    h2 = new QHBoxLayout;
-    h3 = new QHBoxLayout;
+    totalSeconds = 0;
+    remainingSeconds = 0;
 
-    V1 = new QVBoxLayout;
-
+    // -------- Layout setup --------
     h1->addWidget(l1);
     h1->addWidget(minutes);
+    h1->addWidget(ok);
 
-    h2->addWidget(ok);
+    h2->addWidget(lcd);
 
-    h3->addWidget(l2);
-    h3->addWidget(LCD);
+    h3->addWidget(pause);
+    h3->addWidget(reset);
 
-    V1->addLayout(h1);
-    V1->addLayout(h2);
-    V1->addLayout(h3);
+    v1->addLayout(h1);
+    v1->addLayout(h2);
+    v1->addLayout(h3);
 
-    setLayout(V1);
+    setLayout(v1);
+    resize(400, 400);
 
-    connect(ok, &QPushButton::clicked,
-            this, &Widget::startTimer);
-
-    connect(timer, &QTimer::timeout,
-            this, &Widget::updateTimer);
-}
-
-void Widget::startTimer()
-{
-    minutesLeft = minutes->value();
-    secondsLeft = 0;
-
-    LCD->display(minutesLeft * 60 + secondsLeft);
-
-    timer->start(1000);
-}
-
-void Widget::updateTimer()
-{
-    if (minutesLeft == 0 && secondsLeft == 0)
-    {
-        timer->stop();
-        return;
-    }
-
-    if (secondsLeft == 0)
-    {
-        if (minutesLeft > 0)
-        {
-            minutesLeft--;
-            secondsLeft = 59;
-        }
-    }
-    else
-    {
-        secondsLeft--;
-    }
-
-    LCD->display(minutesLeft * 60 + secondsLeft);
+    // -------- Connections --------
+    connect(ok, &QPushButton::clicked, this, &Widget::startTimer);
+    connect(pause, &QPushButton::clicked, this, &Widget::pauseTimer);
+    connect(reset, &QPushButton::clicked, this, &Widget::resetTimer);
+    connect(timer, &QTimer::timeout, this, &Widget::updateTimer);
 }
 
 Widget::~Widget()
 {
+}
+
+// -------- Start timer --------
+void Widget::startTimer()
+{
+    if (!timer->isActive()) {
+
+        int min = minutes->value();
+        totalSeconds = min * 60;
+        remainingSeconds = totalSeconds;
+
+        lcd->display("00:00");
+
+        timer->start(1000);
+    }
+}
+
+// -------- Update every second --------
+void Widget::updateTimer()
+{
+    if (remainingSeconds > 0) {
+
+        remainingSeconds--;
+
+        int m = remainingSeconds / 60;
+        int s = remainingSeconds % 60;
+
+        lcd->display(
+            QString("%1:%2")
+            .arg(m, 2, 10, QChar('0'))
+            .arg(s, 2, 10, QChar('0'))
+        );
+    }
+    else {
+        timer->stop();
+    }
+}
+
+// -------- Pause --------
+void Widget::pauseTimer()
+{
+    timer->stop();
+}
+
+// -------- Reset --------
+void Widget::resetTimer()
+{
+    timer->stop();
+
+    remainingSeconds = totalSeconds;
+
+    lcd->display("00:00");
 }

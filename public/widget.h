@@ -15,28 +15,32 @@ class Widget : public QWidget
     Q_OBJECT
 
 public:
-    Widget(QWidget *parent = 0);
+    Widget(QWidget *parent = nullptr);
     ~Widget();
 
+private:
     QHBoxLayout *h1, *h2, *h3;
-    QVBoxLayout *V1;
+    QVBoxLayout *v1;
 
     QLabel *l1, *l2;
 
     QSpinBox *minutes;
-
-    QLCDNumber *LCD;
+    QLCDNumber *lcd;
 
     QPushButton *ok;
+    QPushButton *pause;
+    QPushButton *reset;
 
     QTimer *timer;
 
-    int minutesLeft;
-    int secondsLeft;
+    int totalSeconds;
+    int remainingSeconds;
 
-public slots:
+private slots:
     void startTimer();
     void updateTimer();
+    void pauseTimer();
+    void resetTimer();
 };
 
 #endif // WIDGET_H
